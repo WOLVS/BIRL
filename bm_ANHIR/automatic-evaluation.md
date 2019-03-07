@@ -41,7 +41,7 @@ Run one of following sample registration experiments:
         -o ~/Medical-temp/experiments_anhir/ \
         --run_comp_benchmark \
         -fiji ~/Applications/Fiji.app/ImageJ-linux64 \
-        -config ./configs/ImageJ_bUnwarpJ_histo-1k.txt
+        -config ./configs/ImageJ_bUnwarpJ_histol-1k.txt
     # remove all registered images
     rm ~/Medical-temp/experiments_anhir/BmUnwarpJ/*/*.jpg \
         ~/Medical-temp/experiments_anhir/BmUnwarpJ/*/*.png

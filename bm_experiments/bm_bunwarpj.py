@@ -14,21 +14,21 @@ INSTALLATION:
 
 Run the basic bUnwarpJ registration with original parameters:
 >> python bm_experiments/bm_bunwarpj.py \
-    -c ./data_images/pairs-imgs-lnds_anhir.csv \
+    -c ./data_images/pairs-imgs-lnds_histol.csv \
     -d ./data_images \
     -o ./results \
     -fiji ./applications/Fiji.app/ImageJ-linux64 \
-    -config ./configs/ImageJ_bUnwarpJ.txt
+    -config ./configs/ImageJ_bUnwarpJ-pure-image_histol-1k.txt
 
 The bUnwarpJ is supporting SIFT and MOPS feature extraction as landmarks
 see: http://imagej.net/BUnwarpJ#SIFT_and_MOPS_plugin_support
 >> python bm_experiments/bm_bunwarpj.py \
-    -c ./data_images/pairs-imgs-lnds_anhir.csv \
+    -c ./data_images/pairs-imgs-lnds_histol.csv \
     -d ./data_images \
     -o ./results \
     -fiji ./applications/Fiji.app/ImageJ-linux64 \
-    -config ./configs/ImageJ_bUnwarpJ.txt \
-    -sift ./configs/ImageJ_SIFT.txt
+    -config ./configs/ImageJ_bUnwarpJ-landmarks_histol-1k.txt \
+    -sift ./configs/ImageJ_SIFT_histol-1k.txt
 
 Disclaimer:
 * tested for version ImageJ 1.52i & 2.35
@@ -75,6 +75,8 @@ run("Extract MOPS Correspondences",
 # macro performing the registration
 MACRO_REGISTRATION = '''// Registration
 //run("Memory & Threads...", "maximum=6951 parallel=1");
+
+// TODO: add/call histogram matching
 
 print ("-> images opening...");
 open("%(source)s");
@@ -135,10 +137,10 @@ class BmUnwarpJ(ImRegBenchmark):
     ...           'path_cover': os.path.join(update_path('data_images'),
     ...                                      'pairs-imgs-lnds_mix.csv'),
     ...           'path_fiji': '.',
-    ...           'path_config_bUnwarpJ': fn_path_conf('ImageJ_bUnwarpJ_histo-1k.txt')}
+    ...           'path_config_bUnwarpJ': fn_path_conf(IImageJ_bUnwarpJ-image_histol-1k.txtk.txt)}
     >>> benchmark = BmUnwarpJ(params)
     >>> benchmark.run()  # doctest: +SKIP
-    >>> params['path_config_IJ_SIFT'] = fn_path_conf('ImageJ_SIFT_histo-1k.txt')
+    >>> params['path_config_IJ_SIFT'] = fn_path_conf(IImageJ_SIFT_histol-1k.txt)
     >>> benchmark = BmUnwarpJ(params)
     >>> benchmark.run()  # doctest: +SKIP
     >>> del benchmark

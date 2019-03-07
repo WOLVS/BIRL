@@ -65,7 +65,7 @@ The project contains the following folders:
 * `docs` - extra documentation and references
 * `scripts_IJ` - macros for ImageJ 
 
-
+---
 
 ## Before benchmarks (pre-processing) 
 
@@ -123,6 +123,7 @@ Moreover we developed two additional script for converting large images, handlin
  * `bm_dataset/split_images_two_tissues.py` splits two tissue samples with clear wide bound in vertical or horizontal direction
  * `bm_dataset/crop_tissue_images.py` crops the tissue sample removing wide homogeneous background
 
+---
 
 ## Experiments with included methods
 
@@ -130,6 +131,8 @@ Moreover we developed two additional script for converting large images, handlin
 
 * **[bUnwarpJ](http://imagej.net/BUnwarpJ)** is the [ImageJ](https://imagej.nih.gov/ij/) plugin for elastic registration (optional integration with [Feature Extraction](http://imagej.net/Feature_Extraction)).
 * ...
+
+Some more image registration methods integrated in ImageJ are listed in [Registration](https://imagej.net/Registration).
 
 ### Install methods and run benchmarks
 
@@ -149,7 +152,7 @@ python birl/bm_template.py \
 or with relative paths:
 ```bash
 python birl/bm_template.py \
-    -c ./data_images/pairs-imgs-lnds_anhir.csv \
+    -c ./data_images/pairs-imgs-lnds_histol.csv \
     -d ./data_images \
     -o ./results \
     --an_executable none
@@ -194,6 +197,7 @@ python bm_experiments/evaluate_experiment.py \
     --visual
 ``` 
 
+---
 
 ## License
 

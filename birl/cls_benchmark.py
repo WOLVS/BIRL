@@ -6,7 +6,7 @@ It also serves for evaluating the input registration pairs
 EXAMPLE (usage):
 >> mkdir ./results
 >> python benchmarks/bm_registration.py \
-    -c data_images/pairs-imgs-lnds_anhir.csv -d ./data_images \
+    -c data_images/pairs-imgs-lnds_histol.csv -d ./data_images \
     -o ./results --unique
 
 Copyright (C) 2016-2019 Jiri Borovec <jiri.borovec@fel.cvut.cz>
