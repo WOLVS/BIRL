@@ -129,6 +129,15 @@ Moreover we developed two additional script for converting large images, handlin
 ### Included registration methods
 
 * **[bUnwarpJ](http://imagej.net/BUnwarpJ)** is the [ImageJ](https://imagej.nih.gov/ij/) plugin for elastic registration (optional integration with [Feature Extraction](http://imagej.net/Feature_Extraction)).
+* **[RNiftyReg](https://github.com/jonclayden/RNiftyReg)** is an R-native interface to the [NiftyReg image registration library](http://sourceforge.net/projects/niftyreg/) which contains programs to perform rigid, affine and non-linear registration of nifti or analyse images.
+    ```bash
+    python bm_experiments/bm_RNiftyReg.py \
+        -c ./data_images/pairs-imgs-lnds_anhir.csv \
+        -d ./data_images \
+        -o ./results \
+        -rexec Rscript \
+        -rscript ./scripts/Rscript/RNiftyReg_linear.r
+    ```
 * ...
 
 ### Install methods and run benchmarks
