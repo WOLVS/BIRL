@@ -137,10 +137,10 @@ class BmUnwarpJ(ImRegBenchmark):
     ...           'path_cover': os.path.join(update_path('data_images'),
     ...                                      'pairs-imgs-lnds_mix.csv'),
     ...           'path_fiji': '.',
-    ...           'path_config_bUnwarpJ': fn_path_conf(IImageJ_bUnwarpJ-image_histol-1k.txtk.txt)}
+    ...           'path_config_bUnwarpJ': fn_path_conf('ImageJ_bUnwarpJ-pure-image_histol-1k.txt')}
     >>> benchmark = BmUnwarpJ(params)
     >>> benchmark.run()  # doctest: +SKIP
-    >>> params['path_config_IJ_SIFT'] = fn_path_conf(IImageJ_SIFT_histol-1k.txt)
+    >>> params['path_config_IJ_SIFT'] = fn_path_conf('ImageJ_bUnwarpJ-pure-image_histol-1k.txt')
     >>> benchmark = BmUnwarpJ(params)
     >>> benchmark.run()  # doctest: +SKIP
     >>> del benchmark
