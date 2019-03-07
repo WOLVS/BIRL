@@ -35,7 +35,7 @@ Run one of following sample registration experiments:
     ```
  * run bUnwarpJ in ImageJ registration on the real data
     ```bash
-    python bm_experiments/bm_bunwarpj.py \
+    python bm_experiments/bm_bUnwarpJ.py \
         -c ~/Medical-data/dataset_ANHIR/images/dataset_medium.csv \
         -d ~/Medical-temp/dataset_ANHIR/images \
         -o ~/Medical-temp/experiments_anhir/ \
