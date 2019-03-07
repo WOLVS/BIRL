@@ -51,7 +51,7 @@ from bm_experiments import bm_comp_perform
 
 NAME_MACRO_REGISTRATION = 'macro_registration.ijm'
 NAME_MACRO_WARP_IMAGE = 'macro_warp_image.ijm'
-PATH_SCRIPT_WARP_LANDMARKS = os.path.join(update_path('scripts_IJ'),
+PATH_SCRIPT_WARP_LANDMARKS = os.path.join(update_path('scripts'), 'ImageJ',
                                           'apply-bunwarpj-transform.bsh')
 NAME_LANDMARKS = 'source_landmarks.txt'
 NAME_LANDMARKS_WARPED = 'warped_source_landmarks.txt'
