@@ -222,7 +222,7 @@ class BmUnwarpJ(ImRegBenchmark):
         cmd = '%s -batch %s' % (self.params['path_fiji'], path_macro)
         return cmd
 
-    def _extract_warped_images_landmarks(self, record):
+    def _extract_warped_image_landmarks(self, record):
         """ get registration results - warped registered images and landmarks
 
         :param record: {str: value}, dictionary with registration params
@@ -254,6 +254,19 @@ class BmUnwarpJ(ImRegBenchmark):
         else:
             path_lnds = None
         return None, path_regist, None, path_lnds
+
+    def _extract_execution_time(self, record):
+        """ if needed update the execution time
+
+        :param record: {str: value}, dictionary with registration params
+        :return float|None: time in minutes
+        """
+        path_dir = self._get_path_reg_dir(record)
+        path_time = os.path.join(path_dir, 'TIME.txt')
+
+        with open(path_time, 'r') as fp:
+            exec_time = float(fp.read()) / 60.
+        return exec_time
 
 
 # RUN by given parameters

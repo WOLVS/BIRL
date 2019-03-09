@@ -129,7 +129,7 @@ Moreover we developed two additional script for converting large images, handlin
 
 ### Included registration methods
 
-* **[bUnwarpJ](http://imagej.net/BUnwarpJ)** is the [ImageJ](https://imagej.nih.gov/ij/) plugin for elastic registration (optional integration with [Feature Extraction](http://imagej.net/Feature_Extraction)).
+* **[bUnwarpJ](http://imagej.net/BUnwarpJ)** is the [ImageJ](https://imagej.nih.gov/ij/) plugin for elastic registration (optional integration with [Feature Extraction](http://imagej.net/Feature_Extraction)). See: [bm_bUnwarpJ](bm_experiments/bm_bUnwarpJ.py)
 * ...
 
 Some more image registration methods integrated in ImageJ are listed in [Registration](https://imagej.net/Registration).
@@ -180,7 +180,8 @@ General methods that should be overwritten:
  * `_check_required_params(...)` verify that all required input parameters are given _[on the beginning of benchmark]_
  * `_prepare_registration(...)` if some extra preparation before running own image registrations are needed _[before each image registration experiment]_
  * `_generate_regist_command(...)` prepare the registration command to be executed, also you can add generating complete registration script/macro if needed; execution using this command is measured as Execution time _[before each image registration experiment]_
- * `_extract_warped_images_landmarks(...)` extract the required warped landmarks or perform landmark warping in this stage if it eas not already part of the image registration _[after each image registration experiment]_
+ * `_extract_warped_image_landmarks(...)` extract the required warped landmarks or perform landmark warping in this stage if it was not already part of the image registration _[after each image registration experiment]_
+ * `_extract_execution_time(...)` optionally extract the execution time from the external script _[after each image registration experiment]_
  * `_clear_after_registration(...)` removing some temporary files generated during image registration _[after each image registration experiment]_
 
 The new image registration methods should be added to `bm_experiments` folder.

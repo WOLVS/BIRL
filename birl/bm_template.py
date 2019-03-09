@@ -48,7 +48,8 @@ class BmTemplate(ImRegBenchmark):
      * _check_required_params
      * _prepare_registration
      * _generate_regist_command
-     * _extract_warped_images_landmarks
+     * _extract_warped_image_landmarks
+     * _extract_execution_time
      * _clear_after_registration
 
     NOTE: The actual implementation simulates the "WORSE" registration while
@@ -113,7 +114,7 @@ class BmTemplate(ImRegBenchmark):
         command = [cmd_img, cmd_lnds]
         return command
 
-    def _extract_warped_images_landmarks(self, record):
+    def _extract_warped_image_landmarks(self, record):
         """ get registration results - warped registered images and landmarks
 
         :param record: {str: value}, dictionary with registration params

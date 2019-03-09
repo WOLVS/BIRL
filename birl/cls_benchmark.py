@@ -324,11 +324,11 @@ class ImRegBenchmark(Experiment):
         # measure execution time
         time_start = time.time()
         cmd_result = exec_commands(commands, path_log)
-        # compute the registration time in minutes
-        row[COL_TIME] = (time.time() - time_start) / 60.
         # if the experiment failed, return back None
         if not cmd_result:
             return None
+        # compute the registration time in minutes
+        row[COL_TIME] = (time.time() - time_start) / 60.
 
         row = self._parse_regist_results(row)
         row = self._clear_after_registration(row)
@@ -390,7 +390,7 @@ class ImRegBenchmark(Experiment):
         return commands
 
     @classmethod
-    def _extract_warped_images_landmarks(self, record):
+    def _extract_warped_image_landmarks(self, record):
         """ get registration results - warped registered images and landmarks
 
         :param record: {str: value}, dictionary with registration params
@@ -405,6 +405,16 @@ class ImRegBenchmark(Experiment):
                                 os.path.basename(record[COL_POINTS_MOVE]))
         return None, path_img, path_lnd, None
 
+    @classmethod
+    def _extract_execution_time(self, record):
+        """ if needed update the execution time
+
+        :param record: {str: value}, dictionary with registration params
+        :return float|None: time in minutes
+        """
+        _ = self._get_path_reg_dir(record)
+        return None
+
     def _parse_regist_results(self, record):
         """ evaluate rests of the experiment and identity the registered image
         and landmarks when the process finished
@@ -412,7 +422,8 @@ class ImRegBenchmark(Experiment):
         :param record: {str: value}, dictionary with registration params
         :return: {str: value}
         """
-        paths = self._extract_warped_images_landmarks(record)
+        # Update the registration outputs / paths
+        paths = self._extract_warped_image_landmarks(record)
         columns = (COL_IMAGE_REF_WARP, COL_IMAGE_MOVE_WARP,
                    COL_POINTS_REF_WARP, COL_POINTS_MOVE_WARP)
 
@@ -420,6 +431,12 @@ class ImRegBenchmark(Experiment):
             # detect image and landmarks
             if path is not None and os.path.isfile(self._update_path(path, 'expt')):
                 record[col] = path
+
+        # Update the registration time
+        exec_time = self._extract_execution_time(record)
+        if exec_time:
+            # compute the registration time in minutes
+            record[COL_TIME] = exec_time
 
         return record
 
