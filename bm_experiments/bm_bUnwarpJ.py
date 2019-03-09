@@ -150,19 +150,14 @@ class BmUnwarpJ(ImRegBenchmark):
                                                         'path_config_bUnwarpJ']
 
     def _prepare(self):
-        """ prepare BM - copy configurations """
+        """ prepare Benchmark - copy configurations """
         logging.info('-> copy configuration...')
-        path_cofig = self.params['path_config_bUnwarpJ']
-        shutil.copy(path_cofig, os.path.join(self.params['path_exp'],
-                                             os.path.basename(path_cofig)))
+
+        self._copy_config_to_expt('path_config_bUnwarpJ')
         if 'path_config_IJ_SIFT' in self.params:
-            path_cofig = self.params['path_config_IJ_SIFT']
-            shutil.copy(path_cofig, os.path.join(self.params['path_exp'],
-                                                 os.path.basename(path_cofig)))
+            self._copy_config_to_expt('path_config_IJ_SIFT')
         if 'path_config_IJ_MOPS' in self.params:
-            path_cofig = self.params['path_config_IJ_MOPS']
-            shutil.copy(path_cofig, os.path.join(self.params['path_exp'],
-                                                 os.path.basename(path_cofig)))
+            self._copy_config_to_expt('path_config_IJ_MOPS')
 
     def _prepare_registration(self, record):
         """ prepare the experiment folder if it is required,
