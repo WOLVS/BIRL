@@ -17,6 +17,7 @@ import os
 import sys
 import time
 import logging
+import shutil
 import multiprocessing as mproc
 from functools import partial
 
@@ -140,7 +141,6 @@ class ImRegBenchmark(Experiment):
     >>> benchmark.run()
     True
     >>> del benchmark
-    >>> import shutil
     >>> shutil.rmtree(path_out, ignore_errors=True)
 
     Running in multiple parallel threads:
@@ -153,7 +153,6 @@ class ImRegBenchmark(Experiment):
     >>> benchmark.run()
     True
     >>> del benchmark
-    >>> import shutil
     >>> shutil.rmtree(path_out, ignore_errors=True)
     """
     REQUIRED_PARAMS = ['path_cover', 'path_out', 'nb_workers']
@@ -192,6 +191,16 @@ class ImRegBenchmark(Experiment):
             path = os.path.join(self.params['path_exp'], path)
         path = update_path(path, absolute=True)
         return path
+
+    def _copy_config_to_expt(self, field_path):
+        """ copy particular configuration to the experiment folder
+
+        :param str field_path: field from parameters containing a path to file
+        """
+        path_config = os.path.join(self.params['path_exp'],
+                                   os.path.basename(self.params[field_path]))
+        shutil.copy(self.params[field_path], path_config)
+        self.params[field_path] = path_config
 
     def _get_paths(self, row):
         """ expand the relative paths to absolute

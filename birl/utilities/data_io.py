@@ -9,9 +9,11 @@ import logging
 import warnings
 from functools import wraps
 
+import nibabel
 import numpy as np
 import pandas as pd
 from PIL import Image
+from skimage import color
 
 #: landmarks coordinates, loading from CSV file
 LANDMARK_COORDS = ['X', 'Y']
@@ -149,6 +151,7 @@ def save_landmarks(path_file, landmarks):
     assert os.path.isdir(os.path.dirname(path_file)), \
         'missing folder "%s"' % os.path.dirname(path_file)
     path_file = os.path.splitext(path_file)[0]
+    landmarks = landmarks.values if isinstance(landmarks, pd.DataFrame) else landmarks
     save_landmarks_csv(path_file + '.csv', landmarks)
     save_landmarks_txt(path_file + '.txt', landmarks)
 
@@ -311,3 +314,83 @@ def save_image(path_image, image):
         return False
     image = convert_ndarray2image(image)
     image.save(path_image)
+
+
+def convert_image2nifti(path_image, path_out):
+    """ converting normal image to Nifty Image
+
+    :param str path_image: input image
+    :param str path_out: path to output folder
+    :return str: resulted image
+
+    >>> path_img = './sample-image.png'
+    >>> save_image(path_img, np.zeros((100, 200, 3)))
+    >>> path_img2 = convert_image2nifti(path_img, '.')
+    >>> path_img2
+    './sample-image.nii'
+    >>> path_img3 = convert_nifti2image(path_img2, '.')
+    >>> path_img3
+    './sample-image.jpg'
+    >>> list(map(os.remove, [path_img, path_img2, path_img3]))  # doctest: +ELLIPSIS
+    [...]
+    """
+    img_name = os.path.splitext(os.path.basename(path_image))[0]
+    path_img_out = os.path.join(path_out, img_name + '.nii')
+    logging.debug('Convert image to Nifti format "%s" ->  "%s"', path_image, path_img_out)
+
+    # img = Image.open(path_image).convert('LA')
+    img = load_image(path_image)
+    nim = nibabel.Nifti1Pair(img, np.eye(4))
+    del img
+    nibabel.save(nim, path_img_out)
+
+    return path_img_out
+
+
+def convert_image2nifti_gray(path_image, path_out):
+    """ converting normal image to Nifty Image
+
+    :param str path_image: input image
+    :param str path_out: path to output folder
+    :return str: resulted image
+
+    >>> path_img = './sample-image.png'
+    >>> save_image(path_img, np.zeros((100, 200, 3)))
+    >>> path_img2 = convert_image2nifti_gray(path_img, '.')
+    >>> path_img2
+    './sample-image.nii'
+    >>> path_img3 = convert_nifti2image(path_img2, '.')
+    >>> path_img3
+    './sample-image.jpg'
+    >>> list(map(os.remove, [path_img, path_img2, path_img3]))  # doctest: +ELLIPSIS
+    [...]
+    """
+    img_name = os.path.splitext(os.path.basename(path_image))[0]
+    path_img_out = os.path.join(path_out, img_name + '.nii')
+    logging.debug('Convert image to Nifti format "%s" ->  "%s"', path_image, path_img_out)
+
+    # img = Image.open(path_image).convert('LA')
+    img = color.rgb2gray(load_image(path_image))
+    nim = nibabel.Nifti1Pair(np.swapaxes(img, 1, 0), np.eye(4))
+    del img
+    nibabel.save(nim, path_img_out)
+
+    return path_img_out
+
+
+def convert_nifti2image(path_image, path_out):
+    img_name = os.path.splitext(os.path.basename(path_image))[0]
+    path_img_out = os.path.join(path_out, img_name + '.jpg')
+    logging.debug('Convert Nifti to image format "%s" ->  "%s"', path_image, path_img_out)
+    nim = nibabel.load(path_image)
+
+    if len(nim.get_data().shape) > 2:  # colour
+        img = nim.get_data()
+    else:  # gray
+        img = np.swapaxes(nim.get_data(), 1, 0)
+
+    if img.max() > 1.5:
+        img = img / 255.
+
+    save_image(path_img_out, img)
+    return path_img_out
