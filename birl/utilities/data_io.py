@@ -258,7 +258,7 @@ def image_size(path_image, decimal=1):
 
 
 @io_image_decorate
-def load_image(path_image):
+def load_image(path_image, force_rgb=True):
     """ load the image in value range (0, 1)
 
     :param str path_image:
@@ -275,13 +275,15 @@ def load_image(path_image):
     image = np.array(Image.open(path_image))
     while image.max() > 1.5:
         image = image / 255.
+    if force_rgb and not (image.ndim == 3 and image.shape[2] == 3):
+        image = color.gray2rgb(image)
     return image.astype(np.float32)
 
 
 def convert_ndarray2image(image):
     """ convert ndarray to PIL image if it not already
 
-    :param image: np.ndarray
+    :param ndarray image: np.ndarray
     :return: Image
 
     >>> img = np.random.random((50, 50, 3))
