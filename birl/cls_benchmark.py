@@ -198,7 +198,7 @@ class ImRegBenchmark(Experiment):
         :param str field_path: field from parameters containing a path to file
         """
         path_config = os.path.join(self.params['path_exp'],
-                                  os.path.basename(self.params[field_path]))
+                                   os.path.basename(self.params[field_path]))
         shutil.copy(self.params[field_path], path_config)
         self.params[field_path] = path_config
 
@@ -405,7 +405,6 @@ class ImRegBenchmark(Experiment):
                                 os.path.basename(record[COL_POINTS_MOVE]))
         return None, path_img, path_lnd, None
 
-    @classmethod
     def _extract_execution_time(self, record):
         """ if needed update the execution time
 

@@ -103,7 +103,8 @@ print(file, time);
 
 run("Close All");
 run("Quit");
-exit();'''
+exit();
+'''
 
 
 def extend_parse(a_parser):
