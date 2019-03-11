@@ -328,11 +328,11 @@ def convert_image2nifti(path_image, path_out):
     >>> path_img = './sample-image.png'
     >>> save_image(path_img, np.zeros((100, 200, 3)))
     >>> path_img2 = convert_image2nifti(path_img, '.')
-    >>> path_img2
-    './sample-image.nii'
+    >>> os.path.isfile(path_img2)
+    True
     >>> path_img3 = convert_nifti2image(path_img2, '.')
-    >>> path_img3
-    './sample-image.jpg'
+    >>> os.path.isfile(path_img3)
+    True
     >>> list(map(os.remove, [path_img, path_img2, path_img3]))  # doctest: +ELLIPSIS
     [...]
     """
@@ -359,11 +359,11 @@ def convert_image2nifti_gray(path_image, path_out):
     >>> path_img = './sample-image.png'
     >>> save_image(path_img, np.zeros((100, 200, 3)))
     >>> path_img2 = convert_image2nifti_gray(path_img, '.')
-    >>> path_img2
-    './sample-image.nii'
+    >>> os.path.isfile(path_img2)
+    True
     >>> path_img3 = convert_nifti2image(path_img2, '.')
-    >>> path_img3
-    './sample-image.jpg'
+    >>> os.path.isfile(path_img3)
+    True
     >>> list(map(os.remove, [path_img, path_img2, path_img3]))  # doctest: +ELLIPSIS
     [...]
     """
