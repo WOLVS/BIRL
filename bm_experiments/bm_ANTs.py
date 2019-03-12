@@ -8,15 +8,15 @@ see:
 INSTALLATION:
 See: https://brianavants.wordpress.com/2012/04/13/updated-ants-compile-instructions-april-12-2012/
 
-* Do not download the binary code, there is an issue:
+* Do NOT download the binary code, there is an issue:
     - https://sourceforge.net/projects/advants/files/ANTS/ANTS_Latest
     - https://github.com/ANTsX/ANTs/issues/733
 * Compile from source:
-    >  git clone git://github.com/stnava/ANTs.git
-    >  mkdir antsbin
+    > git clone git://github.com/stnava/ANTs.git
+    > mkdir antsbin
     > cd antsbin
-    >  ccmake ../ANTs
-    >  make -j 4
+    > ccmake ../ANTs
+    > make -j 4
 * Install it as python package
     > pip install git+https://github.com/ANTsX/ANTsPy.git
 
@@ -26,7 +26,7 @@ Run the basic ANT registration with original parameters:
     -c ./data_images/pairs-imgs-lnds_anhir.csv \
     -d ./data_images \
     -o ./results \
-    --path_ANTs ./applications/ANTs-1.9.x-Linux/bin \
+    --path_ANTs ./applications/ANTs/bin \
     --path_config ./configs/ANTs.txt
 
 
@@ -63,13 +63,13 @@ COMMAND_WARP_IMAGE = '%(path_ANTs)s/antsApplyTransforms \
     --input %(img_source)s \
     --output %(output)s/%(img_name)s.nii \
     --reference-image %(img_target)s \
-    --transform %(transf0)s %(transf_dir)s \
+    --transform %(transfs)s \
     --interpolation Linear'
 COMMAND_WARP_POINTS = '%(path_ANTs)s/antsApplyTransformsToPoints \
     --dimensionality 2 \
     --input %(path_points)s \
     --output %(output)s/%(pts_name)s.csv \
-    --transform [%(transf0)s, 1] %(transf_inv)s'
+    --transform %(transfs)s'
 COL_IMAGE_NII_REF = COL_IMAGE_REF + ' Nifty'
 COL_IMAGE_NII_MOVE = COL_IMAGE_MOVE + ' Nifty'
 
@@ -177,7 +177,7 @@ class BmANTs(ImRegBenchmark):
         # simplified version of landmarks
         lnds = load_landmarks(path_lnds_move)
         path_lnds = os.path.join(path_dir, name_lnds_move + '.csv')
-        pd.DataFrame(lnds, columns=['x', 'y']).to_csv(path_lnds, index=None)
+        pd.DataFrame(lnds[:, [1, 0]], columns=['x', 'y']).to_csv(path_lnds, index=None)
 
         # list output transformations
         tf_elast_inv = sorted(glob.glob(os.path.join(path_dir, 'trans*InverseWarp.nii*')))
@@ -190,16 +190,15 @@ class BmANTs(ImRegBenchmark):
             'output': path_dir,
             'img_target': record[COL_IMAGE_NII_REF],
             'img_source': record[COL_IMAGE_NII_MOVE],
-            'transf0': ' '.join(tf_affine),
-            'transf_dir': (' -t ' if tf_elast else '') + ' '.join(tf_elast),
+            'transfs': ' -t '.join(sorted(tf_affine + tf_elast, reverse=True)),
             'img_name': name_im_move
         }
         cmd_warp_pts = COMMAND_WARP_POINTS % {
             'path_ANTs': self.params['path_ANTs'],
             'output': path_dir,
             'path_points': path_lnds,
-            'transf0': ' '.join(tf_affine),
-            'transf_inv': (' -t ' if tf_elast_inv else '') + ' '.join(tf_elast_inv),
+            'transfs': ' -t '.join(['[ %s , 1]' % tf if 'Affine' in tf else tf
+                                    for tf in sorted(tf_affine + tf_elast_inv)]),
             'pts_name': name_lnds_move
         }
         # execute commands
@@ -207,7 +206,7 @@ class BmANTs(ImRegBenchmark):
                       path_logger=os.path.join(path_dir, 'warping.log'))
         path_regist = convert_nifti2image(os.path.join(path_dir, name_im_move + '.nii'), path_dir)
 
-        save_landmarks(path_lnds, pd.read_csv(path_lnds, index_col=None))
+        save_landmarks(path_lnds, pd.read_csv(path_lnds, index_col=None).values[:, [1, 0]])
 
         return None, path_regist, None, path_lnds
 
@@ -217,7 +216,8 @@ class BmANTs(ImRegBenchmark):
         :param {str: value} record: dictionary with regist. information
         :return {str: value}: the same or updated regist. info
         """
-        [os.remove(p) for p in glob.glob(os.path.join(self._get_path_reg_dir(record), '*.nii'))]
+        [[os.remove(p) for p in glob.glob(os.path.join(self._get_path_reg_dir(record), ext))]
+         for ext in ['*.nii', '*.nii.gz', '*.mat']]
         return record
 
 

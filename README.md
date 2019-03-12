@@ -129,7 +129,15 @@ Moreover we developed two additional script for converting large images, handlin
 ### Included registration methods
 
 * **[bUnwarpJ](http://imagej.net/BUnwarpJ)** is the [ImageJ](https://imagej.nih.gov/ij/) plugin for elastic registration (optional integration with [Feature Extraction](http://imagej.net/Feature_Extraction)).
-* **[Advanced Normalization Tools](http://stnava.github.io/ANTs/) (ANTs)** is a medical imaging framework containing state-of-the-art medical image registration and segmentation methods. For illustration see ANTsPy [registration tutorial](https://github.com/ANTsX/ANTsPy/blob/master/tutorials/10minTutorial.ipynb). See the benchamrk - [bm_ANTs](bm_experiments/bm_ANTs.py).
+* **[Advanced Normalization Tools](http://stnava.github.io/ANTs/) (ANTs)** is a medical imaging framework containing state-of-the-art medical image registration and segmentation methods. For illustration see ANTsPy [registration tutorial](https://github.com/ANTsX/ANTsPy/blob/master/tutorials/10minTutorial.ipynb). 
+    ```bash
+    python bm_experiments/bm_ANTs.py \
+        -c ./data_images/pairs-imgs-lnds_anhir.csv \
+        -d ./data_images \
+        -o ./results \
+        --path_ANTs ./applications/ANTs/bin \
+        --path_config ./configs/ANTs.txt
+    ```
 * ...
 
 ### Install methods and run benchmarks
